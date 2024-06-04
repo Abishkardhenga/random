@@ -10,20 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const server_1 = require("@apollo/server");
+const users_1 = require("./users");
 function CreateGraphqlServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const gqlServer = new server_1.ApolloServer({
             typeDefs: `
         type Query{
-         
+         hello:String
         }
         
         type Mutation{
+            ${users_1.user.mutation}
         }
         `,
             resolvers: {
-                Query: {},
-                Mutation: {}
+                Query: Object.assign({}, users_1.user.resolver.queries),
+                Mutation: Object.assign({}, users_1.user.resolver.mutations)
             },
         });
         yield gqlServer.start();
