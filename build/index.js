@@ -13,50 +13,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const server_1 = require("@apollo/server");
 const express4_1 = require("@apollo/server/express4");
-const db_1 = __importDefault(require("./lib/db"));
+const graphql_1 = __importDefault(require("./graphql"));
 function startServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = (0, express_1.default)();
         app.use(express_1.default.json());
-        const gqlServer = new server_1.ApolloServer({
-            typeDefs: `
-        type Query{
-            hello: String ,
-            say(name:String):String
-        }
-        
-        type Mutation{
-            createUser(firstName:String! ,lastName:String!,  email:String! ,password:String!  ):Boolean
-        }
-        `,
-            resolvers: {
-                Query: {
-                    hello: () => 'hello name is aabiskar',
-                    say: (_, { name }) => `Hi ${name}, how are you ?`
-                },
-                Mutation: {
-                    createUser: (_1, _a) => __awaiter(this, [_1, _a], void 0, function* (_, { firstName, lastName, email, password }) {
-                        const usercreated = yield db_1.default.user.create({
-                            data: {
-                                email,
-                                firstName,
-                                lastName,
-                                password,
-                            }
-                        });
-                        return true;
-                    })
-                }
-            },
-        });
-        yield gqlServer.start();
+        //     const gqlServer = new  ApolloServer({
+        //         typeDefs:`
+        //         type Query{
+        //             hello: String ,
+        //             say(name:String):String
+        //         }
+        //         type Mutation{
+        //             createUser(firstName:String! ,lastName:String!,  email:String! ,password:String!  ):Boolean
+        //         }
+        //         `,
+        //         resolvers:{
+        //            Query : {
+        //             hello : ()=>'hello name is aabiskar',
+        //             say:(_,{name}:{name:string})=>`Hi ${name}, how are you ?`
+        //            },
+        //            Mutation:{
+        //             createUser: async(_,{firstName, lastName, email, password}:{firstName:string; lastName:string; email:string; password:string})=> {
+        // const usercreated = await prisma.user.create({
+        //     data:{
+        //         email,
+        //         firstName,
+        //         lastName,
+        //         password,
+        //     }
+        // })
+        // return true ; 
+        //             }
+        //            }
+        //         },
+        //     })
+        //     await gqlServer.start()
         app.get("/", (req, res) => {
             res.json({
                 message: "Home page"
             });
         });
+        const gqlServer = yield (0, graphql_1.default)();
         app.use("/graphql", (0, express4_1.expressMiddleware)(gqlServer));
         app.listen(8000, () => {
             console.log("server started at port 8000");
