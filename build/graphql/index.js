@@ -16,7 +16,7 @@ function CreateGraphqlServer() {
         const gqlServer = new server_1.ApolloServer({
             typeDefs: `
         type Query{
-         hello:String
+${users_1.user.queries}
         }
         
         type Mutation{
