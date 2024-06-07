@@ -53,5 +53,16 @@ class UserService {
     static decodeToken(token) {
         return jsonwebtoken_1.default.verify(token, JWT_SECRET);
     }
+    static getUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield db_1.default.user.findUnique({ where: { id } });
+                return user;
+            }
+            catch (err) {
+                console.log("this is error", err);
+            }
+        });
+    }
 }
 exports.default = UserService;

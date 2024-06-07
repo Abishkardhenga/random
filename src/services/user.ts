@@ -73,5 +73,17 @@ public static decodeToken(token:string){
 
 }
 
+public static async getUserById(id:string){
+    try{
+      const user =   await prisma.user.findUnique({where:{id}})
+      return user;
+
+    }
+    catch(err){
+        console.log("this is error", err)
+    }
+
+}
+
 }
 export default UserService ; 

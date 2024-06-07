@@ -19,13 +19,15 @@ const queries = {
         const token = yield user_1.default.getUserToken(payload);
         return token;
     }),
-    getLoginUser: (_, parameter, context) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("this is context ", context);
-        console.log(context);
-        if (context) {
-            return context;
+    getLoginUser: (_, parameter, contextValue) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("this is context ", contextValue);
+        if (contextValue && contextValue.user) {
+            console.log(contextValue.user.id);
+            const id = contextValue.user.id;
+            const user = yield user_1.default.getUserById(id);
+            return user;
         }
-        throw new Error("No context hai ");
+        throw new Error("No context available");
     })
 };
 const mutations = {

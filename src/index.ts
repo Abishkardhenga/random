@@ -55,20 +55,28 @@ async function startServer (){
         })
         const gqlServer = await CreateGraphqlServer()
 
-        app.use("/graphql", expressMiddleware(gqlServer,{context:async({req})=>{
-            const token = req.headers['token']
-            console.log("this is token", token)
-try {
-const user =     UserService.decodeToken(token as string)
-console.log("this is user",user)
-return user ;
-
+        app.use("/graphql", expressMiddleware(gqlServer,
+            {
+                context: async ({ req }) => {
+                    const token = req.headers['token'];
+                    try {
+                        if (token) {
+                            console.log("Received token:", token);
+                            const user = UserService.decodeToken(token as string);
+                            console.log("Decoded user:", user);
+                            return { user };
+                        } else {
+                            console.log("No token provided");
+                        }
+                    } catch (error) {
+                        console.error("Error decoding token:", error);
+                    }
+                    return {};
+                }}
     
-} catch (error) {
-    return { };
     
-}
-        }}))
+    
+    ))
     
     app.listen(8000, ()=>{
         console.log("server started at port 8000")

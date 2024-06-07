@@ -57,18 +57,26 @@ function startServer() {
             });
         });
         const gqlServer = yield (0, graphql_1.default)();
-        app.use("/graphql", (0, express4_1.expressMiddleware)(gqlServer, { context: (_a) => __awaiter(this, [_a], void 0, function* ({ req }) {
+        app.use("/graphql", (0, express4_1.expressMiddleware)(gqlServer, {
+            context: (_a) => __awaiter(this, [_a], void 0, function* ({ req }) {
                 const token = req.headers['token'];
-                console.log("this is token", token);
                 try {
-                    const user = user_1.default.decodeToken(token);
-                    console.log("this is user", user);
-                    return user;
+                    if (token) {
+                        console.log("Received token:", token);
+                        const user = user_1.default.decodeToken(token);
+                        console.log("Decoded user:", user);
+                        return { user };
+                    }
+                    else {
+                        console.log("No token provided");
+                    }
                 }
                 catch (error) {
-                    return {};
+                    console.error("Error decoding token:", error);
                 }
-            }) }));
+                return {};
+            })
+        }));
         app.listen(8000, () => {
             console.log("server started at port 8000");
         });
