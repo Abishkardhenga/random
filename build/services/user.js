@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../lib/db"));
 const node_crypto_1 = require("node:crypto");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+let JWT_SECRET = "ahhasdfjkak";
 class UserService {
     static hashPass(salt, password) {
         const hashedPass = (0, node_crypto_1.createHmac)('sha256', salt).update(password).digest("hex");
@@ -45,9 +46,12 @@ class UserService {
             const hashedPass = UserService.hashPass(userSalt, password);
             if (hashedPass !== user.password)
                 throw new Error("Incorrect Password ");
-            const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, "ahhasdfjkak");
+            const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, JWT_SECRET);
             return token;
         });
+    }
+    static decodeToken(token) {
+        return jsonwebtoken_1.default.verify(token, JWT_SECRET);
     }
 }
 exports.default = UserService;

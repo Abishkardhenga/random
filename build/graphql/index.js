@@ -15,10 +15,10 @@ function CreateGraphqlServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const gqlServer = new server_1.ApolloServer({
             typeDefs: `
+        ${users_1.user.typeDefs}
         type Query{
 ${users_1.user.queries}
         }
-        
         type Mutation{
             ${users_1.user.mutation}
         }

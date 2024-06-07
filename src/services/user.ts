@@ -17,6 +17,8 @@ export interface getUserTokenPayload{
 
 
 
+let JWT_SECRET = "ahhasdfjkak"
+
 
 class UserService{
 
@@ -61,9 +63,14 @@ public static async getUserToken(payload:getUserTokenPayload){
     const hashedPass =  UserService.hashPass(userSalt,password)
     if(hashedPass !== user.password) throw new Error("Incorrect Password ")
 
-        const token = Jwt.sign({id:user.id,email:user.email},"ahhasdfjkak")
+        const token = Jwt.sign({id:user.id,email:user.email},JWT_SECRET)
 
 return token;
+}
+
+public static decodeToken(token:string){
+    return Jwt.verify(token, JWT_SECRET)
+
 }
 
 }

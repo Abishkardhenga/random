@@ -1,11 +1,11 @@
-import  { typedef } from "./typedef"
+import  { typeDefs } from "./typedef"
 import { queries } from "./queries"
 import  { mutation } from "./mutation"
 import { resolver} from "./resolver"
 
 
 export const user = { 
-    typedef,
+    typeDefs,
     queries,
     mutation,
     resolver

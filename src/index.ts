@@ -2,6 +2,7 @@ import express   from "express";
 
 import { expressMiddleware } from '@apollo/server/express4';
 import CreateGraphqlServer from "./graphql";
+import UserService from "./services/user";
 
 
 async function startServer (){
@@ -54,7 +55,20 @@ async function startServer (){
         })
         const gqlServer = await CreateGraphqlServer()
 
-        app.use("/graphql", expressMiddleware(gqlServer))
+        app.use("/graphql", expressMiddleware(gqlServer,{context:async({req})=>{
+            const token = req.headers['token']
+            console.log("this is token", token)
+try {
+const user =     UserService.decodeToken(token as string)
+console.log("this is user",user)
+return user ;
+
+    
+} catch (error) {
+    return { };
+    
+}
+        }}))
     
     app.listen(8000, ()=>{
         console.log("server started at port 8000")

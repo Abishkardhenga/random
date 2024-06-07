@@ -18,6 +18,14 @@ const queries = {
     getUserToken: (_, payload) => __awaiter(void 0, void 0, void 0, function* () {
         const token = yield user_1.default.getUserToken(payload);
         return token;
+    }),
+    getLoginUser: (_, parameter, context) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("this is context ", context);
+        console.log(context);
+        if (context) {
+            return context;
+        }
+        throw new Error("No context hai ");
     })
 };
 const mutations = {
